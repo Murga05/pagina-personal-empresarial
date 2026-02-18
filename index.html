@@ -1,105 +1,110 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gymshark</title>
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sitio personal empresarial inspirado en Gymshark, con proyectos, contacto y gestor de tareas.">
+  <title>Gymshark | Página personal empresarial</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-    <!-- ENCABEZADO -->
-    <header>
-        <h1>Gymshark</h1>
-        <p>Marca de ropa deportiva enfocada en el fitness y estilo de vida activo.</p>
+  <header class="hero">
+    <div class="hero__content">
+      <p class="hero__tag">Marca deportiva</p>
+      <h1>Gymshark</h1>
+      <p class="hero__intro">Marca de ropa deportiva enfocada en fitness, rendimiento y estilo de vida activo.</p>
+      <div class="hero__meta">
         <p><strong>Misión:</strong> Inspirar a las personas a mejorar su rendimiento.</p>
         <p><strong>Visión:</strong> Ser una marca líder en ropa deportiva a nivel mundial.</p>
-    </header>
+      </div>
+    </div>
+  </header>
 
-    <!-- CONTENIDO PRINCIPAL -->
-    <main>
+  <nav class="nav-principal" aria-label="Navegación principal">
+    <a href="#proyectos">Proyectos</a>
+    <a href="#contacto">Contacto</a>
+    <a href="#gestor-tareas">Gestor de tareas</a>
+  </nav>
 
-        <!-- PROYECTOS -->
-        <section id="proyectos">
-            <h2>Proyectos Destacados</h2>
+  <main>
+    <section id="proyectos" class="seccion">
+      <div class="seccion__encabezado">
+        <h2>Proyectos destacados</h2>
+        <p>Estas iniciativas representan el enfoque digital y de marca de Gymshark.</p>
+      </div>
 
-            <div class="contenedor-proyectos">
+      <div class="contenedor-proyectos">
+        <article class="proyecto">
+          <h3>Línea de ropa deportiva</h3>
+          <img src="IMAGENES/Camisa.webp" alt="Camiseta deportiva de Gymshark en exhibición">
+          <p>Diseños cómodos y modernos para entrenar con libertad y estilo.</p>
+        </article>
 
-                <article class="proyecto">
-                    <h3>Línea de ropa deportiva</h3>
-                    <img src="IMAGENES/camisa.webp" alt="Ropa deportiva Gymshark">
-                    <p>Ropa cómoda y moderna para entrenar.</p>
-                </article>
+        <article class="proyecto">
+          <h3>Colaboraciones con atletas</h3>
+          <img src="IMAGENES/atletas.png" alt="Atletas promocionando la marca Gymshark">
+          <p>Alianzas con influencers y atletas profesionales para impulsar la comunidad fitness.</p>
+        </article>
 
-                <article class="proyecto">
-                    <h3>Colaboraciones con atletas</h3>
-                    <img src="IMAGENES/atletas.png" alt="Atletas Gymshark">
-                    <p>Trabajo con influencers y atletas profesionales.</p>
-                </article>
+        <article class="proyecto">
+          <h3>Tienda en línea</h3>
+          <a href="https://row.gymshark.com/" target="_blank" rel="noopener noreferrer">
+            <img src="IMAGENES/tiendaenlinea.png" alt="Vista de la tienda en línea de Gymshark">
+          </a>
+          <p>Plataforma web para descubrir y comprar productos desde cualquier lugar.</p>
+        </article>
+      </div>
+    </section>
 
-                <article class="proyecto">
-                    <h3>Tienda en línea</h3>
-                    <a href="https://row.gymshark.com/" target="_blank">
-                        <img src="IMAGENES/tiendaenlinea.png" alt="Tienda en línea Gymshark">
-                    </a>
-                    <p>Plataforma web para comprar productos desde casa.</p>
-                </article>
+    <section id="contacto" class="seccion">
+      <div class="seccion__encabezado">
+        <h2>Contacto</h2>
+        <p>¿Tienes una idea, colaboración o consulta? Escríbenos.</p>
+      </div>
 
-            </div>
-        </section>
+      <form id="contactForm" novalidate>
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" name="nombre" required minlength="2" placeholder="Tu nombre">
 
-        <!-- CONTACTO -->
-        <section id="contacto">
-            <h2>Contacto</h2>
+        <label for="correo">Correo</label>
+        <input type="email" id="correo" name="correo" required placeholder="correo@ejemplo.com">
 
-            <form>
-                <label for="nombre">Nombre</label>
-                <input type="text" id="nombre" required>
+        <label for="mensaje">Mensaje</label>
+        <textarea id="mensaje" name="mensaje" rows="4" required minlength="10" placeholder="Cuéntanos cómo podemos ayudarte"></textarea>
 
-                <label for="correo">Correo</label>
-                <input type="email" id="correo" required>
+        <button type="submit">Enviar</button>
+        <p id="formStatus" class="form-status" aria-live="polite"></p>
+      </form>
+    </section>
 
-                <label for="mensaje">Mensaje</label>
-                <textarea id="mensaje" rows="4" required></textarea>
+    <section id="gestor-tareas" class="seccion">
+      <div class="seccion__encabezado">
+        <h2>Gestión de tareas</h2>
+        <p>Organiza y administra tus tareas diarias.</p>
+      </div>
 
-                <button type="submit">Enviar</button>
-            </form>
-        </section>
-
-                <!-- GESTOR DE TAREAS -->
-        <section id="gestor-tareas">
-            <h2>Gestión de Tareas</h2>
-            <p>Organiza y administra tus tareas diarias.</p>
-
-            <div class="tareas-container">
-                <input 
-                    type="text" 
-                    id="tareaInput" 
-                    placeholder="Escribe una nueva tarea">
-
-                <button id="agregarBtn">Agregar Tarea</button>
-
-                <ul id="listaTareas"></ul>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- PIE DE PÁGINA -->
-    <footer>
-        <p>Síguenos en redes sociales</p>
-        <div class="redes">
-            <a href="#">Instagram</a>
-            <a href="#">Facebook</a>
-            <a href="#">Twitter</a>
+      <div class="tareas-container">
+        <div class="tareas-input-row">
+          <input type="text" id="tareaInput" placeholder="Escribe una nueva tarea" aria-label="Nueva tarea">
+          <button id="agregarBtn" type="button">Agregar</button>
         </div>
-        <p>© 2026 Gymshark</p>
-    </footer>
-    
-    <!-- JavaScript -->
-    <script src="app.js"></script>
 
+        <div class="tareas-estado" id="contadorTareas" aria-live="polite"></div>
+        <ul id="listaTareas"></ul>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Síguenos en redes sociales</p>
+    <div class="redes">
+      <a href="#" aria-label="Instagram de Gymshark">Instagram</a>
+      <a href="#" aria-label="Facebook de Gymshark">Facebook</a>
+      <a href="#" aria-label="Twitter de Gymshark">Twitter</a>
+    </div>
+    <p>© 2026 Gymshark</p>
+  </footer>
+
+  <script src="app.js"></script>
 </body>
 </html>
