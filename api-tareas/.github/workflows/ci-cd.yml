@@ -1,0 +1,42 @@
+name: CI-CD
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+    branches: ["main", "master"]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: api-tareas/package.json
+
+      - name: Install dependencies
+        working-directory: api-tareas
+        run: npm install
+
+      - name: Run tests
+        working-directory: api-tareas
+        run: npm test
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deployment placeholder
+        run: |
+          echo "Configura aquí el deploy a tu SaaS (Render, Railway o Vercel)."
+          echo "Ejemplo: ejecutar CLI o webhook según proveedor."

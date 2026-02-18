@@ -1,117 +1,141 @@
-// =============================
-// CLASE TAREA
-// =============================
 class Tarea {
-    constructor(nombre, completa = false) {
-        this.nombre = nombre;
-        this.completa = completa;
-    }
-
-    editar(nuevoNombre) {
-        this.nombre = nuevoNombre;
-    }
-
-    cambiarEstado() {
-        this.completa = !this.completa;
-    }
+  constructor(nombre, completa = false) {
+    this.nombre = nombre;
+    this.completa = completa;
+  }
 }
 
-// =============================
-// CLASE GESTOR DE TAREAS
-// =============================
 class GestorDeTareas {
-    constructor() {
-        this.tareas = JSON.parse(localStorage.getItem("tareas")) || [];
-    }
+  constructor() {
+    const guardadas = JSON.parse(localStorage.getItem("tareas")) || [];
+    this.tareas = guardadas.map(t => new Tarea(t.nombre, Boolean(t.completa)));
+  }
 
-    agregarTarea(tarea) {
-        this.tareas.push(tarea);
-        this.guardar();
-    }
+  agregarTarea(nombre) {
+    this.tareas.push(new Tarea(nombre));
+    this.guardar();
+  }
 
-    eliminarTarea(index) {
-        this.tareas.splice(index, 1);
-        this.guardar();
-    }
+  eliminarTarea(index) {
+    this.tareas.splice(index, 1);
+    this.guardar();
+  }
 
-    guardar() {
-        localStorage.setItem("tareas", JSON.stringify(this.tareas));
-    }
+  editarTarea(index, nuevoNombre) {
+    this.tareas[index].nombre = nuevoNombre;
+    this.guardar();
+  }
+
+  cambiarEstado(index) {
+    this.tareas[index].completa = !this.tareas[index].completa;
+    this.guardar();
+  }
+
+  guardar() {
+    localStorage.setItem("tareas", JSON.stringify(this.tareas));
+  }
 }
 
-// =============================
-// MANIPULACIÓN DEL DOM
-// =============================
 const gestor = new GestorDeTareas();
 
 const inputTarea = document.getElementById("tareaInput");
 const botonAgregar = document.getElementById("agregarBtn");
 const listaTareas = document.getElementById("listaTareas");
+const contadorTareas = document.getElementById("contadorTareas");
+const contactForm = document.getElementById("contactForm");
+const formStatus = document.getElementById("formStatus");
 
-// =============================
-// RENDERIZAR TAREAS
-// =============================
-const renderizarTareas = () => {
-    listaTareas.innerHTML = "";
-
-    gestor.tareas.forEach((tarea, index) => {
-        const li = document.createElement("li");
-
-        li.innerHTML = `
-            <span>${tarea.nombre}</span>
-            <div>
-                <button onclick="editarTarea(${index})">Editar</button>
-                <button onclick="eliminarTarea(${index})">Eliminar</button>
-            </div>
-        `;
-
-        listaTareas.appendChild(li);
-    });
+const actualizarContador = () => {
+  const completadas = gestor.tareas.filter(t => t.completa).length;
+  const total = gestor.tareas.length;
+  contadorTareas.textContent = `Tareas completadas: ${completadas} de ${total}`;
 };
 
-// =============================
-// AGREGAR TAREA
-// =============================
-botonAgregar.addEventListener("click", () => {
-    const texto = inputTarea.value.trim();
+const crearBoton = (texto, clases, onClick) => {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.textContent = texto;
+  if (clases) button.className = clases;
+  button.addEventListener("click", onClick);
+  return button;
+};
 
-    if (texto === "") {
-        alert("No se permiten tareas vacías");
-        return;
+const renderizarTareas = () => {
+  listaTareas.innerHTML = "";
+
+  gestor.tareas.forEach((tarea, index) => {
+    const li = document.createElement("li");
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = tarea.completa;
+    checkbox.setAttribute("aria-label", `Marcar tarea ${tarea.nombre} como completada`);
+    checkbox.addEventListener("change", () => {
+      gestor.cambiarEstado(index);
+      renderizarTareas();
+    });
+
+    const nombre = document.createElement("span");
+    nombre.textContent = tarea.nombre;
+    if (tarea.completa) {
+      nombre.classList.add("tarea-completa");
     }
 
-    const nuevaTarea = new Tarea(texto);
-    gestor.agregarTarea(nuevaTarea);
+    const acciones = document.createElement("div");
+    acciones.className = "acciones-tarea";
 
-    inputTarea.value = "";
-    renderizarTareas();
+    const btnEditar = crearBoton("Editar", "btn-secundario", () => {
+      const nuevoNombre = prompt("Editar tarea", tarea.nombre);
+      if (nuevoNombre !== null && nuevoNombre.trim() !== "") {
+        gestor.editarTarea(index, nuevoNombre.trim());
+        renderizarTareas();
+      }
+    });
+
+    const btnEliminar = crearBoton("Eliminar", "btn-peligro", () => {
+      gestor.eliminarTarea(index);
+      renderizarTareas();
+    });
+
+    acciones.append(btnEditar, btnEliminar);
+    li.append(checkbox, nombre, acciones);
+    listaTareas.appendChild(li);
+  });
+
+  actualizarContador();
+};
+
+botonAgregar.addEventListener("click", () => {
+  const texto = inputTarea.value.trim();
+
+  if (!texto) {
+    alert("No se permiten tareas vacías");
+    return;
+  }
+
+  gestor.agregarTarea(texto);
+  inputTarea.value = "";
+  renderizarTareas();
+  inputTarea.focus();
 });
 
-// =============================
-// ELIMINAR TAREA
-// =============================
-const eliminarTarea = index => {
-    gestor.eliminarTarea(index);
-    renderizarTareas();
-};
+inputTarea.addEventListener("keydown", event => {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    botonAgregar.click();
+  }
+});
 
-// =============================
-// EDITAR TAREA
-// =============================
-const editarTarea = index => {
-    const nuevoNombre = prompt(
-        "Editar tarea",
-        gestor.tareas[index].nombre
-    );
+contactForm.addEventListener("submit", event => {
+  event.preventDefault();
 
-    if (nuevoNombre !== null && nuevoNombre.trim() !== "") {
-        gestor.tareas[index].editar(nuevoNombre);
-        gestor.guardar();
-        renderizarTareas();
-    }
-};
+  if (!contactForm.checkValidity()) {
+    formStatus.textContent = "Por favor completa correctamente todos los campos del formulario.";
+    return;
+  }
 
-// =============================
-// CARGAR TAREAS AL INICIAR
-// =============================
+  formStatus.textContent = "¡Gracias! Tu mensaje se envió correctamente.";
+  contactForm.reset();
+});
+
 renderizarTareas();
