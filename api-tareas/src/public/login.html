@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login API</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f6fb; margin: 0; padding: 24px; }
+    .card { max-width: 430px; margin: auto; background: #fff; border-radius: 12px; padding: 24px; box-shadow: 0 8px 24px rgba(0,0,0,.08); }
+    input, button { width: 100%; padding: 10px; margin-top: 10px; }
+    button { background: #111; color: #fff; border: none; border-radius: 8px; cursor: pointer; }
+    pre { white-space: pre-wrap; background: #f0f3f7; padding: 10px; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Login</h1>
+    <p>Vista estática para autenticación con JWT.</p>
+    <input id="username" placeholder="Usuario" />
+    <input id="password" type="password" placeholder="Contraseña" />
+    <button id="btnLogin">Iniciar sesión</button>
+    <pre id="resultado">Esperando credenciales...</pre>
+  </div>
+
+  <script>
+    document.getElementById('btnLogin').addEventListener('click', async () => {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const output = document.getElementById('resultado');
+
+      try {
+        const response = await fetch('/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+
+        const data = await response.json();
+        output.textContent = JSON.stringify(data, null, 2);
+
+        if (data.token) {
+          localStorage.setItem('token', data.token);
+        }
+      } catch (error) {
+        output.textContent = error.message;
+      }
+    });
+  </script>
+</body>
+</html>
